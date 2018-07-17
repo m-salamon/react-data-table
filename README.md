@@ -4,8 +4,8 @@ The table gets data dynamically with axios and gives you the ability to export t
 
 
 Implements:
-⋅⋅* material-ui
-⋅⋅* Bootstrap 4
+* material-ui
+* Bootstrap 4
 
 
 To use:
