@@ -9,6 +9,6 @@ Implements:
 
 
 To use:
-1. clone the repo
-2. npm install
-3. npm start
+1. `clone the repo`
+2. `npm install`
+3. `npm start`
