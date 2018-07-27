@@ -1,8 +1,5 @@
-
 import React, { Component } from 'react';
-import './App.css';
 import EnhancedTable from './EnhancedTable'
-import './DottedBox.css';
 
 class App extends Component {
   render() {

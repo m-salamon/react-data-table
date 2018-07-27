@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,8 +14,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 import Exports from './Exports';
-
 import axios from 'axios'
+
 
 
 function getSorting(order, orderBy) {
@@ -31,7 +31,10 @@ const columnData = [
   { id: 'button', numeric: true, disablePadding: true, label: '' },
 ];
 
-class EnhancedTableHead extends React.Component {
+class EnhancedTableHead extends Component {
+
+
+
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -140,7 +143,7 @@ class EnhancedTable extends React.Component {
 
   componentWillMount = async () => {
     axios.get('https://jsonplaceholder.typicode.com/albums').then((res) => {
-      this.setState({ data: res.data})
+      this.setState({ data: res.data })
     })
 
   }
@@ -199,29 +202,32 @@ class EnhancedTable extends React.Component {
   //isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   showExport = (type) => {
-    console.log('type', type) 
+    console.log('type', type)
     this.setState({
       showExport: true,
       exportAs: type
-    },() => this.setState({ showExport: false }))
+    }, () => this.setState({ showExport: false }))
   }
 
 
-
   render() {
+
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page, showExport, exportAs } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
 
+    return (<Fragment>
 
-    return ([
       <div className="btn-group">
+
         <button className="btn btn-info" onClick={() => this.showExport('csv')}>CSV</button>
         <button className="btn btn-info" onClick={() => this.showExport('print')}>Print</button>
+
+
         {showExport && <Exports data={data.sort(getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} exportAs={exportAs} />}
-      </div>,
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} exportAs={exportAs} />}
+      </div>
 
       <Paper className={classes.root}>
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -279,7 +285,7 @@ class EnhancedTable extends React.Component {
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
         />
       </Paper>
-    ]);
+    </Fragment>);
   }
 }
 
