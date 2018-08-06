@@ -20,13 +20,13 @@ class PrintTable extends Component {
     const ref = pri.document.createElement('link');
     ref.rel = 'stylesheet';
     ref.type = 'text/css';
-    ref.href = 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+    ref.href = 'https://github.com/m-salamon/react-data-table/blob/master/src/custom.css';
     head.appendChild(ref);
 
-    console.log(pri.document)
-  //  pri.document.close();
-    //pri.focus();
-   // pri.print();
+    //console.log(pri.document)
+    pri.document.close();
+    pri.focus();
+    pri.print();
 
   }
 
