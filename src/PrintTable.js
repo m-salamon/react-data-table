@@ -10,13 +10,24 @@ class PrintTable extends Component {
   }
 
   componentDidMount = () => {
+
     var content = document.getElementById("divcontents");
     var pri = document.getElementById("ifmcontentstoprint").contentWindow;
-    pri.document.open();
+    // pri.document.open();
     pri.document.write(content.innerHTML);
-    pri.document.close();
-    pri.focus();
-    pri.print();
+
+    const head = pri.document.getElementsByTagName('head')[0];
+    const ref = pri.document.createElement('link');
+    ref.rel = 'stylesheet';
+    ref.type = 'text/css';
+    ref.href = 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+    head.appendChild(ref);
+
+    console.log(pri.document)
+  //  pri.document.close();
+    //pri.focus();
+   // pri.print();
+
   }
 
 
@@ -48,22 +59,21 @@ class PrintTable extends Component {
 
     return (
       <Fragment>
-        <iframe id="ifmcontentstoprint" style={{ height: '0px', width: '0px', position: 'absolute' }}></iframe>
-
-        <div id="divcontents" className="container" >
-          <div className="row ">
-            <div className="print-header"> Dealmed Medical Supplies</div>
-            <table >
-              <thead >
-                {header()}
-              </thead>
-              <tbody>
-                {body()}
-              </tbody>
-            </table>
+        <iframe id="ifmcontentstoprint" ref="iframe" style={{ height: '0px', width: '0px', position: 'absolute' }}>
+          <div id="divcontents" className="container" >
+            <div className="row ">
+              <div className="print-header"> Dealmed Medical Supplies</div>
+              <table className="table table-bordered">
+                <thead >
+                  {header()}
+                </thead>
+                <tbody>
+                  {body()}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-
+        </iframe>
       </Fragment>)
 
 
