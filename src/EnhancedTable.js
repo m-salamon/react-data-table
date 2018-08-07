@@ -16,12 +16,8 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Exports from './Exports';
 import axios from 'axios'
 
-
-
 function getSorting(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
-    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+  return order === 'desc' ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1) : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
 }
 
 const columnData = [
@@ -33,18 +29,14 @@ const columnData = [
 
 class EnhancedTableHead extends Component {
 
-
-
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
-    const exports = <div><button>PDF</button></div>
 
     return (
-
       <TableHead>
         <TableRow>
           {columnData.map(column => {
@@ -53,18 +45,15 @@ class EnhancedTableHead extends Component {
                 key={column.id}
                 numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
-                sortDirection={orderBy === column.id ? order : false}
-              >
+                sortDirection={orderBy === column.id ? order : false}>
                 <Tooltip
                   title="Sort"
                   placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                  enterDelay={300}
-                >
+                  enterDelay={300}>
                   <TableSortLabel
                     active={orderBy === column.id}
                     direction={order}
-                    onClick={this.createSortHandler(column.id)}
-                  >
+                    onClick={this.createSortHandler(column.id)}>
                     {column.label}
                   </TableSortLabel>
                 </Tooltip>
@@ -73,7 +62,6 @@ class EnhancedTableHead extends Component {
           }, this)}
         </TableRow>
       </TableHead>
-
     );
   }
 }
@@ -86,31 +74,6 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit,
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
-      : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
-  spacer: {
-    flex: '1 1 100%',
-  },
-  actions: {
-    color: theme.palette.text.secondary,
-  },
-  title: {
-    flex: '0 0 auto',
-  },
-});
 
 const styles = theme => ({
   root: {
@@ -128,7 +91,6 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       order: 'desc',
       orderBy: 'id',
@@ -145,7 +107,6 @@ class EnhancedTable extends React.Component {
     axios.get('https://jsonplaceholder.typicode.com/albums').then((res) => {
       this.setState({ data: res.data })
     })
-
   }
 
   handleRequestSort = (event, property) => {
@@ -155,7 +116,6 @@ class EnhancedTable extends React.Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
-
     this.setState({ order, orderBy });
   };
 
@@ -168,7 +128,6 @@ class EnhancedTable extends React.Component {
   };
 
   handleClick = (event, id) => {
-
     console.log('Row ID ', id)
 
     const { selected } = this.state;
@@ -187,7 +146,6 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-
     this.setState({ selected: newSelected });
   };
 
@@ -209,83 +167,76 @@ class EnhancedTable extends React.Component {
     }, () => this.setState({ showExport: false }))
   }
 
-
   render() {
-
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page, showExport, exportAs } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-
-    return (<Fragment>
-
-      <div className="btn-group">
-
-        <button className="btn btn-info" onClick={() => this.showExport('csv')}>CSV</button>
-        <button className="btn btn-info" onClick={() => this.showExport('print')}>Print</button>
-
-
-        {showExport && <Exports data={data.sort(getSorting(order, orderBy))
-          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} exportAs={exportAs} />}
-      </div>
-
-      <Paper className={classes.root}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle" >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {data
-                .sort(getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  // const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      key={n.id}
-                      hover
-                    >
-                      <TableCell numeric component="th" scope="row" padding="none"> {n.id} </TableCell>
-                      <TableCell >{n.title}</TableCell>
-                      <TableCell numeric>{n.userId}</TableCell>
-                      <TableCell padding="checkbox">
-                        <button onClick={event => this.handleClick(event, n.id)}>Edit</button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+    return (
+      <Fragment>
+        <div className="btn-group">
+          <button className="btn btn-info" onClick={() => this.showExport('csv')}>CSV</button>
+          <button className="btn btn-info" onClick={() => this.showExport('print')}>Print</button>
+          {showExport && <Exports data={data.sort(getSorting(order, orderBy))
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} exportAs={exportAs} />}
         </div>
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-        />
-      </Paper>
-    </Fragment>);
+
+        <Paper className={classes.root}>
+          {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle" >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {data
+                  .sort(getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    // const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        key={n.id}
+                        hover>
+                        <TableCell numeric component="th" scope="row" padding="none"> {n.id} </TableCell>
+                        <TableCell >{n.title}</TableCell>
+                        <TableCell numeric>{n.userId}</TableCell>
+                        <TableCell padding="checkbox">
+                          <button onClick={event => this.handleClick(event, n.id)}>Edit</button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page',
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page',
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          />
+        </Paper>
+      </Fragment>);
   }
 }
 

@@ -56,19 +56,14 @@ class Exports extends Component {
     return result;
   }
 
-
-
   render() {
-
-    return (<Fragment>
-      <div >
-        {this.state.exportAs == 'csv' && this.downloadCSV({ filename: "stock-data.csv" })}
-        {this.state.exportAs == 'print' && <PrintTable data={this.state.data} />}
-      </div>
-
-    </Fragment>);
+    return (
+      <Fragment>
+        <div >
+          {this.state.exportAs == 'csv' && this.downloadCSV({ filename: "stock-data.csv" })}
+          {this.state.exportAs == 'print' && <PrintTable data={this.state.data} />}
+        </div>
+      </Fragment>);
   }
 }
-
-
 export default Exports

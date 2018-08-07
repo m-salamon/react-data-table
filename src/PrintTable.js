@@ -1,46 +1,25 @@
 import React, { Component, Fragment } from 'react';
+import ReactDOMServer from 'react-dom/server';
 
 class PrintTable extends Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-    this.state = {
-
-    }
-  }
 
   componentDidMount = () => {
-
-    var content = document.getElementById("divcontents");
     var pri = document.getElementById("ifmcontentstoprint").contentWindow;
-    // pri.document.open();
-    pri.document.write(content.innerHTML);
-
-    const head = pri.document.getElementsByTagName('head')[0];
-    const ref = pri.document.createElement('link');
-    ref.rel = 'stylesheet';
-    ref.type = 'text/css';
-    ref.href = 'https://github.com/m-salamon/react-data-table/blob/master/src/custom.css';
-    head.appendChild(ref);
-
-    //console.log(pri.document)
+    pri.document.open();
+    pri.document.write(this.printDataTable());
     pri.document.close();
     pri.focus();
     pri.print();
-
   }
 
-
-  render() {
-
+  printDataTable = () => {
     let header = () => {
       var key = Object.keys(this.props.data[0]);
       return (
         <tr className="text-medium-dark">
-          {key.includes('userId') ? <th >User Id</th> : null}
-          {key.includes('id') ? <th >ID</th> : null}
-          {key.includes('title') ? <th >Title</th> : null}
-          <th></th>
+          {key.includes('userId') ? <th style={styles.tablethtd}>User Id</th> : null}
+          {key.includes('id') ? <th style={styles.tablethtd}>ID</th> : null}
+          {key.includes('title') ? <th style={styles.tablethtd}>Title</th> : null}
         </tr>);
     }
 
@@ -50,38 +29,71 @@ class PrintTable extends Component {
         const { id } = item;
         return (
           <tr key={id}>
-            {key.includes('userId') ? <td >{item.userId}</td> : null}
-            {key.includes('id') ? <td >{item.id}</td> : null}
-            {key.includes('title') ? <td >{item.title}</td> : null}
+            {key.includes('userId') ? <td style={styles.tablethtd}>{item.userId}</td> : null}
+            {key.includes('id') ? <td style={styles.tablethtd}>{item.id}</td> : null}
+            {key.includes('title') ? <td style={styles.tablethtd}>{item.title}</td> : null}
           </tr>);
       });
     }
 
-    return (
-      <Fragment>
-        <iframe id="ifmcontentstoprint" ref="iframe" style={{ height: '0px', width: '0px', position: 'absolute' }}>
-          <div id="divcontents" className="container" >
-            <div className="row ">
-              <div className="print-header"> Dealmed Medical Supplies</div>
-              <table className="table table-bordered">
-                <thead >
-                  {header()}
-                </thead>
-                <tbody>
-                  {body()}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </iframe>
-      </Fragment>)
-
+    return ReactDOMServer.renderToStaticMarkup(
+      <div style={styles.page}>
+        <div style={styles.pageheader}>Track-the-projects</div>
+        <table style={styles.table}>
+          <thead style={styles.tablethead}>{header()}</thead>
+          <tbody>{body()}</tbody>
+        </table>
+      </div>)
 
   }
+
+  render() {
+    return (
+      <Fragment>
+        <iframe id="ifmcontentstoprint" ref="iframe" style={{ height: '0px', width: '0px', position: 'absolute' }}></iframe>
+      </Fragment>)
+  }
+
 }
-
-
 export default PrintTable
 
 
-
+const styles = {
+  //page
+  page: {
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
+  },
+  //page header
+  pageheader: {
+    marginBottom: "20px",
+    marginTop: "20px",
+    textAlign: "center"
+  },
+  //table
+  table: {
+    width: "100%",
+    maxWidth: "100%",
+    marginBottom: "1rem",
+    margin: "0",
+    fontSize: "12px",
+    fontWeight: "100",
+    lineHeight: "1",
+    color: "#212529",
+    textAlign: "left",
+    backgroundColor: "#fff",
+    borderCollapse: "collapse",
+    borderSpacing: "0px"
+  },
+  //.table th,
+  tablethtd: {
+    padding: "0.75rem",
+    verticalAlign: "top",
+    border: "1px solid #dee2e6"
+  },
+  //table thead
+  tablethead: {
+    borderBottomWidth: "2px",
+    borderBottom: "2px solid #dee2e6"
+  }
+}
