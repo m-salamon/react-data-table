@@ -29,7 +29,7 @@ class PrintTable extends Component {
 
     let body = () => {
       var key = Object.keys(this.props.data[0]);
-      return data.map((item, index) => {
+      return this.props.data.map((item, index) => {
         const {id} = item
         return (
           <tr key={id}>

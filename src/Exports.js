@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PrintTable from './PrintTable'
+import PDFTable from './PDFTable'
 
 class Exports extends Component {
   constructor(props) {
@@ -62,6 +63,7 @@ class Exports extends Component {
         <div >
           {this.state.exportAs == 'csv' && this.downloadCSV({ filename: "stock-data.csv" })}
           {this.state.exportAs == 'print' && <PrintTable data={this.state.data} />}
+          {this.state.exportAs == 'pdf' && <PDFTable data={this.state.data} />}
         </div>
       </Fragment>);
   }

@@ -177,6 +177,7 @@ class EnhancedTable extends React.Component {
         <div className="btn-group">
           <button className="btn btn-info" onClick={() => this.showExport('csv')}>CSV</button>
           <button className="btn btn-info" onClick={() => this.showExport('print')}>Print</button>
+          <button className="btn btn-info" onClick={() => this.showExport('pdf')}>PDF</button>
           {showExport && <Exports data={data.sort(getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} exportAs={exportAs} />}
         </div>
