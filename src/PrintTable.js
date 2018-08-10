@@ -17,23 +17,35 @@ class PrintTable extends Component {
       var key = Object.keys(this.props.data[0]);
       return (
         <tr className="text-medium-dark">
-          {key.includes('userId') ? <th style={styles.tablethtd}>User Id</th> : null}
-          {key.includes('id') ? <th style={styles.tablethtd}>ID</th> : null}
-          {key.includes('title') ? <th style={styles.tablethtd}>Title</th> : null}
-        </tr>);
+          <th style={styles.tableth}>#</th>
+          {key.includes("userId") ? (
+            <th style={styles.tableth}>User Id</th>
+          ) : null}
+          {key.includes("id") ? <th style={styles.tableth}>ID</th> : null}
+          {key.includes("title") ? <th style={styles.tableth}>Title</th> : null}
+        </tr>
+      )
     }
 
     let body = () => {
       var key = Object.keys(this.props.data[0]);
-      return this.props.data.map((item, index) => {
-        const { id } = item;
+      return data.map((item, index) => {
+        const {id} = item
         return (
           <tr key={id}>
-            {key.includes('userId') ? <td style={styles.tablethtd}>{item.userId}</td> : null}
-            {key.includes('id') ? <td style={styles.tablethtd}>{item.id}</td> : null}
-            {key.includes('title') ? <td style={styles.tablethtd}>{item.title}</td> : null}
-          </tr>);
-      });
+            <td style={styles.tabletd}>{index + 1}</td>
+            {key.includes("userId") ? (
+              <td style={styles.tabletd}>{item.userId}</td>
+            ) : null}
+            {key.includes("id") ? (
+              <td style={styles.tabletd}>{item.id}</td>
+            ) : null}
+            {key.includes("title") ? (
+              <td style={styles.tabletd}>{item.title}</td>
+            ) : null}
+          </tr>
+        )
+      })
     }
 
     return ReactDOMServer.renderToStaticMarkup(
@@ -59,12 +71,10 @@ export default PrintTable
 
 
 const styles = {
-  //page
   page: {
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
   },
-  //page header
   pageheader: {
     marginBottom: "20px",
     marginTop: "20px",
@@ -83,15 +93,24 @@ const styles = {
     textAlign: "left",
     backgroundColor: "#fff",
     borderCollapse: "collapse",
-    borderSpacing: "0px"
-  },
-  //.table th,
-  tablethtd: {
-    padding: "0.75rem",
-    verticalAlign: "top",
+    borderSpacing: "0px",
+    textAlign: "left",
     border: "1px solid #dee2e6"
   },
-  //table thead
+  //.table th,
+  tabletd: {
+    padding: "0.75rem",
+    verticalAlign: "top",
+    borderTop: "1px solid #dee2e6",
+    borderBottom: "1px solid #dee2e6"
+  },
+  tableth: {
+    padding: "0.75rem",
+    verticalAlign: "top",
+    borderTop: "1px solid #dee2e6",
+    borderBottom: "1px solid #dee2e6",
+    backgroundColor: "rgba(0,0,0,.05)"
+  },
   tablethead: {
     borderBottomWidth: "2px",
     borderBottom: "2px solid #dee2e6"
